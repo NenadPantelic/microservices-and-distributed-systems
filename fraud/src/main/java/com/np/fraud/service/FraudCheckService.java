@@ -1,6 +1,6 @@
 package com.np.fraud.service;
 
-import com.np.fraud.dto.FraudCheckResponse;
+import com.np.client.fraud.FraudCheckResponse;
 import com.np.fraud.model.FraudCheckHistory;
 import com.np.fraud.repository.FraudCheckHistoryRepository;
 import lombok.extern.slf4j.Slf4j;

@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: eureka-server
+  freemarker:
+    template-loader-path: classpath:/templates/
+    prefer-file-system-access: false
+  config:
+    import: "optional:configserver:"
+
+
+server:
+  port: 8761
+
+
+eureka:
+  instance:
+    hostname:
+      localhost:
+    # this is the server itself, this intended for clients
+    fetch-registry: false
+    # only clients should register to service registry
+    register-with-eureka: false

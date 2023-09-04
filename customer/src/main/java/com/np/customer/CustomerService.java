@@ -1,13 +1,23 @@
 package com.np.customer;
 
+import com.np.client.fraud.FraudCheckResponse;
+import com.np.client.fraud.FraudClient;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Service
-public record CustomerService(CustomerRepository customerRepository,
-                              RestTemplate restTemplate) {
+public class CustomerService {
+
+    private final CustomerRepository customerRepository;
+    private final FraudClient fraudClient;
+
+    @Autowired
+    public CustomerService(CustomerRepository customerRepository, FraudClient fraudClient) {
+        this.customerRepository = customerRepository;
+        this.fraudClient = fraudClient;
+    }
 
     public void registerCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
         // validate input params
@@ -19,12 +29,8 @@ public record CustomerService(CustomerRepository customerRepository,
                 .build();
 
         customerRepository.saveAndFlush(customer);
-        FraudCheckResponse fraudCheckResponse = restTemplate.getForObject(
-                "http://localhost:8081/api/v1/fraud-check/{customerId}",
-                FraudCheckResponse.class,
-                customer.getId()
-        );
 
+        FraudCheckResponse fraudCheckResponse = fraudClient.isFraudster(customer.getId());
         if (fraudCheckResponse != null && fraudCheckResponse.isFraudster()) {
             throw new IllegalStateException("Fraudster detected");
         }

@@ -1,4 +1,4 @@
-package com.np.customer;
+package com.np.client.fraud;
 
 public record FraudCheckResponse(boolean isFraudster) {
 }
