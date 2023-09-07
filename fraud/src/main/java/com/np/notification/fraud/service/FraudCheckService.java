@@ -1,8 +1,8 @@
-package com.np.fraud.service;
+package com.np.notification.fraud.service;
 
 import com.np.client.fraud.FraudCheckResponse;
-import com.np.fraud.model.FraudCheckHistory;
-import com.np.fraud.repository.FraudCheckHistoryRepository;
+import com.np.notification.fraud.model.FraudCheckHistory;
+import com.np.notification.fraud.repository.FraudCheckHistoryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

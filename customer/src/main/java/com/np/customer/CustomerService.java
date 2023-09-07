@@ -1,7 +1,9 @@
 package com.np.customer;
 
+import com.np.amqp.RabbitMQMessageProducer;
 import com.np.client.fraud.FraudCheckResponse;
 import com.np.client.fraud.FraudClient;
+import com.np.client.notification.NotificationRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,11 +14,15 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final FraudClient fraudClient;
+    private final RabbitMQMessageProducer rabbitMQMessageProducer;
 
     @Autowired
-    public CustomerService(CustomerRepository customerRepository, FraudClient fraudClient) {
+    public CustomerService(CustomerRepository customerRepository,
+                           FraudClient fraudClient,
+                           RabbitMQMessageProducer rabbitMQMessageProducer) {
         this.customerRepository = customerRepository;
         this.fraudClient = fraudClient;
+        this.rabbitMQMessageProducer = rabbitMQMessageProducer;
     }
 
     public void registerCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
@@ -34,6 +40,17 @@ public class CustomerService {
         if (fraudCheckResponse != null && fraudCheckResponse.isFraudster()) {
             throw new IllegalStateException("Fraudster detected");
         }
+
+        NotificationRequest notificationRequest = new NotificationRequest(
+                customer.getId(),
+                customer.getEmail(),
+                String.format("Hi %s, welcome to Nenad's demo app...", customer.getFirstName())
+        );
+        rabbitMQMessageProducer.publish(
+                notificationRequest,
+                "internal.exchange",
+                "internal.notification.routing-key"
+        );
 
 
     }

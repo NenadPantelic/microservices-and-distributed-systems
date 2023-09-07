@@ -1,7 +1,7 @@
-package com.np.fraud.controller;
+package com.np.notification.fraud.controller;
 
 import com.np.client.fraud.FraudCheckResponse;
-import com.np.fraud.service.FraudCheckService;
+import com.np.notification.fraud.service.FraudCheckService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -29,3 +29,9 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     enabled: true
+
+client:
+  fraud:
+    url: http://localhost:8081
+  notification:
+    url: http://localhost:8082

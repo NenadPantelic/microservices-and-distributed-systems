@@ -1,4 +1,4 @@
-package com.np.fraud.model;
+package com.np.notification.fraud.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

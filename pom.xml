@@ -15,6 +15,8 @@
         <module>eureka-server</module>
         <module>client</module>
         <module>client</module>
+        <module>notification</module>
+        <module>amqp</module>
     </modules>
 
     <name>np-services</name>
@@ -80,6 +82,11 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
     </dependencies>
     <build>
