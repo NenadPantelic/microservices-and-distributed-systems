@@ -8,6 +8,7 @@ services:
       PGDATA: /data/postgres
     volumes:
       - postgres:/data/postgres
+      - ./db:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
     networks:
@@ -37,6 +38,72 @@ services:
       - "15672:15672"
     networks:
       - spring
+  eureka-server:
+    image: npantelic/eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - spring
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+
+  api-gateway:
+    image: npantelic/apigateway:latest
+    container_name: api-gateway
+    ports:
+      - "8083:8083"
+    depends_on:
+      - eureka-server
+    networks:
+      - spring
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+
+  customer:
+    image: npantelic/customer:latest
+    container_name: customer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-server
+      - postgres
+      - rabbitmq
+    networks:
+      - spring
+      - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+
+  fraud:
+    image: npantelic/fraud:latest
+    container_name: fraud
+    ports:
+      - "8085:8085"
+    depends_on:
+      - eureka-server
+      - postgres
+      - rabbitmq
+    networks:
+      - spring
+      - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+
+  notification:
+    image: npantelic/notification:latest
+    container_name: notification
+    ports:
+      - "8082:8082"
+    depends_on:
+      - eureka-server
+      - postgres
+      - rabbitmq
+    networks:
+      - spring
+      - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
 
 networks:
   postgres:
